@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.6-eclipse-temurin-17'
-            args '-v /root/.m2:/root/.m2' // optional: caches Maven dependencies
-        }
-    }
+    agent any
 
     stages {
         stage('Clone') {
@@ -13,15 +8,14 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Test in Maven Container') {
             steps {
-                sh 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+                script {
+                    docker.image('maven:3.9.6-eclipse-temurin-17').inside {
+                        sh 'mvn clean package'
+                        sh 'mvn test'
+                    }
+                }
             }
         }
 
