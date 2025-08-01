@@ -18,8 +18,10 @@
     </properties>
 
     <build>
-        <plugins>
+        <!-- ✅ Correct place for finalName -->
+        <finalName>app</finalName>
 
+        <plugins>
             <!-- Compiler plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -44,7 +46,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
