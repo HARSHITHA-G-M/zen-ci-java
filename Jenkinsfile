@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3.9.6-eclipse-temurin-17'
+            args '-v /root/.m2:/root/.m2' // optional: caches Maven dependencies
+        }
+    }
 
     stages {
         stage('Clone') {
@@ -28,7 +33,10 @@ pipeline {
 
         stage('Docker Run') {
             steps {
-                sh 'docker run -d --name zen-app -p 8080:8080 zen-ci-java'
+                sh '''
+                    docker rm -f zen-app || true
+                    docker run -d --name zen-app -p 8080:8080 zen-ci-java
+                '''
             }
         }
     }
